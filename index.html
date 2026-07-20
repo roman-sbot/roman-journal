@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Pribadi | Catatan & Pemikiran</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border-color: #e2e8f0;
+            --bubble-visitor: #f1f5f9;
+            --bubble-author: #dbeafe;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --border-color: #334155;
+            --bubble-visitor: #334155;
+            --bubble-author: #1e3a8a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding-bottom: 60px;
+        }
+
+        /* --- 1. READING PROGRESS BAR --- */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.1s ease-out;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            max-width: 900px;
+            margin: 20px auto 30px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        /* --- CONTAINER UTAMA --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- 2. BERANDA GAYA YOUTUBE --- */
+        .category-chips {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .youtube-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .yt-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .yt-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .yt-thumbnail {
+            width: 100%;
+            height: 150px;
+            background-color: #cbd5e1;
+            object-fit: cover;
+        }
+
+        .yt-details {
+            padding: 15px;
+        }
+
+        .yt-tag {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .yt-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .yt-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* --- 3. AREA DETAIL ARTIKEL (CLEAN READ) --- */
+        .article-view {
+            max-width: 680px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .article-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .article-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .article-body {
+            font-size: 17px;
+            color: var(--text-color);
+        }
+
+        .article-body p {
+            margin-bottom: 20px;
+        }
+
+        blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            font-style: italic;
+            color: var(--text-muted);
+            margin: 20px 0;
+        }
+
+        /* --- 4. KOMENTAR GAYA CHAT SMS --- */
+        .comments-section {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+
+        .comments-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .chat-bubble {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .chat-bubble.visitor {
+            align-self: flex-start;
+            background: var(--bubble-visitor);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-bubble.author {
+            align-self: flex-end;
+            background: var(--bubble-author);
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-sender {
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            color: var(--primary);
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-color);
+            padding-left: 10px;
+        }
+
+        .chat-send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* --- 5. WIDGET MELAYANG SEMBUNYI DI SISI --- */
+        .drawer-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 25px 20px;
+            transition: right 0.3s ease;
+            border-left: 1px solid var(--border-color);
+        }
+
+        .side-drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .widget-block {
+            margin-bottom: 25px;
+        }
+
+        .widget-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .widget-input, .widget-select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .widget-btn {
+            width: 100%;
+            padding: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. READING PROGRESS BAR -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- HEADER BLOG -->
+    <header>
+        <a href="#" class="logo">CatatanKu✨</a>
+        <div class="top-nav">
+            <button class="theme-toggle" id="themeBtn" title="Ganti Tema">🌙</button>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- 2. BERANDA UTAMA GAYA YOUTUBE -->
+        <div class="category-chips">
+            <div class="chip active">Semua</div>
+            <div class="chip">#CatatanHarian</div>
+            <div class="chip">#Kesehatan Mental</div>
+            <div class="chip">#Teknologi</div>
+        </div>
+
+        <div class="youtube-grid">
+            <!-- Kartu 1 -->
+            <div class="yt-card">
+                <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=500&q=80" class="yt-thumbnail" alt="Thumbnail">
+                <div class="yt-details">
+                    <span class="yt-tag">#CatatanHarian</span>
+                    <h3 class="yt-title">Menemukan Ketenangan di Tengah Rutinitas Kerja</h3>
+                    <div class="yt-meta">21 Juli 2026 • ⏱️ 3 mnt baca</div>
+                </div>
+            </div>
+
+            <!-- Kartu 2 -->
+            <div class="yt-card">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80" class="yt-thumbnail" alt="Thumbnail">
+                <div class="yt-details">
+                    <span class="yt-tag">#Kesehatan Mental</span>
+                    <h3 class="yt-title">Kenapa Tampilan Minimalis Bikin Otak Lebih Rileks?</h3>
+                    <div class="yt-meta">18 Juli 2026 • ⏱️ 4 mnt baca</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TAMPILAN ARTIKEL UTAMA (CLEAN) -->
+        <main class="article-view">
+            <article>
+                <div class="article-header">
+                    <span class="yt-tag">#CatatanHarian</span>
+                    <h1 class="article-title">Menemukan Ketenangan di Tengah Rutinitas Kerja</h1>
+                    <div class="yt-meta">Ditulis oleh <b>Roman</b> • 21 Juli 2026 • ⏱️ 3 mnt baca</div>
+                </div>
+
+                <div class="article-body" id="articleContent">
+                    <p>Kadang, aktivitas harian yang padat bikin pikiran cepat lelah. Di tengah tumpukan pekerjaan dan barang yang harus diproses setiap hari, menjaga fokus itu adalah tantangan tersendiri.</p>
+                    
+                    <blockquote>
+                        "Ketenangan bukan berarti tidak ada badai, melainkan kemampuan untuk tetap tenang di dalam badai itu sendiri."
+                    </blockquote>
+
+                    <p>Salah satu cara sederhana yang aku lakukan adalah menyisihkan waktu sebentar untuk istirahat tanpa melihat layar HP. Cukup tarik napas dalam-dalam, minum air putih, dan membiarkan pikiran beristirahat sejenak.</p>
+                    
+                    <p>Bagaimana dengan kamu? Apa kebiasaan kecil yang biasa kamu lakukan untuk melepas penat setelah seharian beraktivitas?</p>
+                </div>
+            </article>
+
+            <!-- 4. KOLOM KOMENTAR GAYA CHAT SMS -->
+            <section class="comments-section">
+                <h3 class="comments-title">💬 Diskusi SMS (Komentar)</h3>
+                
+                <div class="chat-box" id="chatBox">
+                    <!-- Balon Pengunjung -->
+                    <div class="chat-bubble visitor">
+                        <div class="chat-sender">Budi</div>
+                        Relate banget tulisan kali ini! Aku biasanya kalau lelah suka dengerin musik pelan sih.
+                    </div>
+                    
+                    <!-- Balon Penulis -->
+                    <div class="chat-bubble author">
+                        <div class="chat-sender">Roman (Penulis) 🟢</div>
+                        Setuju Bud! Musik pelan emang ampuh banget buat nurunin tensi otak.
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Ketik komentar ala SMS...">
+                    <button class="chat-send-btn" id="sendBtn">Kirim ➡️</button>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <!-- 5. WIDGET MELAYANG SEMBUNYI DI SISI (DRAWER) -->
+    <button class="drawer-toggle" id="drawerToggle" title="Buka Fitur">⚙️</button>
+
+    <div class="side-drawer" id="sideDrawer">
+        <div class="drawer-header">
+            <h3>Fitur Tambahan</h3>
+            <button class="drawer-close" id="drawerClose">✖</button>
+        </div>
+
+        <!-- Widget 1: Pemutar Musik -->
+        <div class="widget-block">
+            <h4 class="widget-title">🎵 Pemutar Musik</h4>
+            <input type="text" id="ytUrl" class="widget-input" placeholder="Paste link video YouTube...">
+            <button class="widget-btn" id="playYtBtn">Putar dari YouTube</button>
+            <div style="margin: 10px 0; font-size: 11px; text-align: center; color: var(--text-muted);">— ATAU —</div>
+            <input type="file" id="localAudio" class="widget-input" accept="audio/*">
+            <audio id="audioPlayer" controls style="width: 100%; margin-top: 5px; display: none;"></audio>
+        </div>
+
+        <!-- Widget 2: Read Aloud -->
+        <div class="widget-block">
+            <h4 class="widget-title">🗣️ Read Aloud (Suara)</h4>
+            <select id="voiceSelect" class="widget-select">
+                <option value="">Memuat pilihan suara...</option>
+            </select>
+            <button class="widget-btn" id="readBtn">▶️ Simak Artikel Ini</button>
+            <button class="widget-btn" id="stopReadBtn" style="background: #ef4444; margin-top: 5px;">⏹️ Hentikan Suara</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT / LOGIKA INTERAKTIF -->
+    <script>
+        // --- 1. PROGRESS BAR SCROLL ---
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // --- DARK MODE TOGGLE ---
+        const themeBtn = document.getElementById('themeBtn');
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeBtn.textContent = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeBtn.textContent = '☀️';
+            }
+        });
+
+        // --- SIDE DRAWER TOGGLE ---
+        const drawer = document.getElementById('sideDrawer');
+        document.getElementById('drawerToggle').onclick = () => drawer.classList.add('open');
+        document.getElementById('drawerClose').onclick = () => drawer.classList.remove('open');
+
+        // --- FITUR CHAT SMS (KOMENTAR) ---
+        const sendBtn = document.getElementById('sendBtn');
+        const chatInput = document.getElementById('chatInput');
+        const chatBox = document.getElementById('chatBox');
+
+        sendBtn.onclick = () => {
+            const text = chatInput.value.trim();
+            if (text) {
+                const bubble = document.createElement('div');
+                bubble.className = 'chat-bubble visitor';
+                bubble.innerHTML = `<div class="chat-sender">Pembaca</div>${text}`;
+                chatBox.appendChild(bubble);
+                chatInput.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        };
+
+        // --- FITUR MUSIK LOKAL ---
+        const localAudio = document.getElementById('localAudio');
+        const audioPlayer = document.getElementById('audioPlayer');
+        localAudio.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                audioPlayer.src = URL.createObjectURL(file);
+                audioPlayer.style.display = 'block';
+                audioPlayer.play();
+            }
+        };
+
+        // --- FITUR READ ALOUD (WEB SPEECH API) ---
+        const synth = window.speechSynthesis;
+        const voiceSelect = document.getElementById('voiceSelect');
+        let voices = [];
+
+        function populateVoices() {
+            voices = synth.getVoices();
+            voiceSelect.innerHTML = '';
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        populateVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoices;
+        }
+
+        document.getElementById('readBtn').onclick = () => {
+            if (synth.speaking) synth.cancel();
+            const text = document.getElementById('articleContent').innerText;
+            const utterThis = new SpeechSynthesisUtterance(text);
+            if (voiceSelect.value !== "") {
+                utterThis.voice = voices[voiceSelect.value];
+            }
+            synth.speak(utterThis);
+        };
+
+        document.getElementById('stopReadBtn').onclick = () => {
+            if (synth.speaking) synth.cancel();
+        };
+    </script>
+</body>
+</html>
