@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Pribadi | Catatan & Pemikiran</title>
+    <title>Roman Journal | Catatan & Pemikiran</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +22,7 @@
             --bubble-visitor: #f1f5f9;
             --bubble-author: #dbeafe;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --article-font-size: 17px;
         }
 
         [data-theme="dark"] {
@@ -51,7 +52,7 @@
             padding-bottom: 60px;
         }
 
-        /* --- 1. READING PROGRESS BAR --- */
+        /* --- READING PROGRESS BAR --- */
         #progress-container {
             position: fixed;
             top: 0;
@@ -89,15 +90,18 @@
         .top-nav {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 8px;
         }
 
-        .theme-toggle {
-            background: none;
-            border: none;
-            font-size: 20px;
+        .theme-toggle, .font-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 14px;
             cursor: pointer;
             color: var(--text-color);
+            font-weight: 600;
         }
 
         /* --- CONTAINER UTAMA --- */
@@ -107,7 +111,7 @@
             padding: 0 20px;
         }
 
-        /* --- 2. BERANDA GAYA YOUTUBE --- */
+        /* --- BERANDA GAYA YOUTUBE --- */
         .category-chips {
             display: flex;
             gap: 10px;
@@ -185,7 +189,7 @@
             color: var(--text-muted);
         }
 
-        /* --- 3. AREA DETAIL ARTIKEL (CLEAN READ) --- */
+        /* --- AREA DETAIL ARTIKEL --- */
         .article-view {
             max-width: 680px;
             margin: 0 auto;
@@ -210,7 +214,7 @@
         }
 
         .article-body {
-            font-size: 17px;
+            font-size: var(--article-font-size);
             color: var(--text-color);
         }
 
@@ -226,7 +230,100 @@
             margin: 20px 0;
         }
 
-        /* --- 4. KOMENTAR GAYA CHAT SMS --- */
+        /* --- REAKSI EMOJI & BAGIKAN --- */
+        .article-actions {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .reaction-title, .share-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .reaction-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .react-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .react-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .share-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-btn {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- KARTU TENTANG SAYA --- */
+        .about-author {
+            margin-top: 35px;
+            padding: 20px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .author-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* --- KOMENTAR --- */
         .comments-section {
             margin-top: 40px;
             border-top: 1px solid var(--border-color);
@@ -254,7 +351,6 @@
             padding: 12px 16px;
             border-radius: 18px;
             font-size: 14px;
-            position: relative;
         }
 
         .chat-bubble.visitor {
@@ -304,7 +400,7 @@
             font-weight: 600;
         }
 
-        /* --- 5. WIDGET MELAYANG SEMBUNYI DI SISI --- */
+        /* --- WIDGET DRAWER --- */
         .drawer-toggle {
             position: fixed;
             bottom: 25px;
@@ -396,58 +492,61 @@
 </head>
 <body>
 
-    <!-- 1. READING PROGRESS BAR -->
+    <!-- READING PROGRESS BAR -->
     <div id="progress-container">
         <div id="progress-bar"></div>
     </div>
 
     <!-- HEADER BLOG -->
     <header>
-        <a href="#" class="logo">CatatanKu✨</a>
+        <a href="#" class="logo">Roman Journal✨</a>
         <div class="top-nav">
+            <button class="font-btn" id="decreaseFont">A-</button>
+            <button class="font-btn" id="resetFont">A</button>
+            <button class="font-btn" id="increaseFont">A+</button>
             <button class="theme-toggle" id="themeBtn" title="Ganti Tema">🌙</button>
         </div>
     </header>
 
     <div class="container">
         
-        <!-- 2. BERANDA UTAMA GAYA YOUTUBE -->
+        <!-- BERANDA UTAMA GAYA YOUTUBE -->
         <div class="category-chips">
-            <div class="chip active">Semua</div>
-            <div class="chip">#CatatanHarian</div>
-            <div class="chip">#Kesehatan Mental</div>
-            <div class="chip">#Teknologi</div>
+            <div class="chip active" data-category="all">Semua</div>
+            <div class="chip" data-category="harian">#CatatanHarian</div>
+            <div class="chip" data-category="kesehatan">#KesehatanMental</div>
+            <div class="chip" data-category="tekno">#Teknologi</div>
         </div>
 
         <div class="youtube-grid">
             <!-- Kartu 1 -->
-            <div class="yt-card">
+            <div class="yt-card" data-category="harian">
                 <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=500&q=80" class="yt-thumbnail" alt="Thumbnail">
                 <div class="yt-details">
                     <span class="yt-tag">#CatatanHarian</span>
                     <h3 class="yt-title">Menemukan Ketenangan di Tengah Rutinitas Kerja</h3>
-                    <div class="yt-meta">21 Juli 2026 • ⏱️ 3 mnt baca</div>
+                    <div class="yt-meta">22 Juli 2026 • <span class="read-time-card">⏱️ Calculating...</span></div>
                 </div>
             </div>
 
             <!-- Kartu 2 -->
-            <div class="yt-card">
+            <div class="yt-card" data-category="kesehatan">
                 <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80" class="yt-thumbnail" alt="Thumbnail">
                 <div class="yt-details">
-                    <span class="yt-tag">#Kesehatan Mental</span>
+                    <span class="yt-tag">#KesehatanMental</span>
                     <h3 class="yt-title">Kenapa Tampilan Minimalis Bikin Otak Lebih Rileks?</h3>
                     <div class="yt-meta">18 Juli 2026 • ⏱️ 4 mnt baca</div>
                 </div>
             </div>
         </div>
 
-        <!-- 3. TAMPILAN ARTIKEL UTAMA (CLEAN) -->
+        <!-- TAMPILAN ARTIKEL UTAMA -->
         <main class="article-view">
             <article>
                 <div class="article-header">
                     <span class="yt-tag">#CatatanHarian</span>
                     <h1 class="article-title">Menemukan Ketenangan di Tengah Rutinitas Kerja</h1>
-                    <div class="yt-meta">Ditulis oleh <b>Roman</b> • 21 Juli 2026 • ⏱️ 3 mnt baca</div>
+                    <div class="yt-meta">Ditulis oleh <b>Roman</b> • 22 Juli 2026 • <span id="readTime">⏱️ Menghitung waktu baca...</span></div>
                 </div>
 
                 <div class="article-body" id="articleContent">
@@ -463,18 +562,46 @@
                 </div>
             </article>
 
-            <!-- 4. KOLOM KOMENTAR GAYA CHAT SMS -->
+            <!-- REAKSI & BAGIKAN -->
+            <div class="article-actions">
+                <div>
+                    <span class="reaction-title">Berikan Reaksimu:</span>
+                    <div class="reaction-btns">
+                        <button class="react-btn" data-count="0">❤️ Suka <span>0</span></button>
+                        <button class="react-btn" data-count="0">💡 Inspiratif <span>0</span></button>
+                        <button class="react-btn" data-count="0">🔥 Keren <span>0</span></button>
+                        <button class="react-btn" data-count="0">🤝 Relate <span>0</span></button>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="share-title">Bagikan Tulisan Ini:</span>
+                    <div class="share-btns">
+                        <a href="#" id="shareWa" target="_blank" class="share-btn">📲 Bagikan ke WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TENTANG SAYA -->
+            <div class="about-author">
+                <!-- Kalau sudah upload foto profil sendiri, ganti src di bawah jadi "foto-profil.jpg" -->
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Foto Roman" class="author-avatar" id="authorImg">
+                <div class="author-info">
+                    <h4>Tentang Saya — Roman ✍️</h4>
+                    <p>Halo! Perkenalkan, aku Roman. Selamat datang di jurnal pribadiku. ✍️✨ Di sini aku membagikan catatan harian, pemikiran santai, serta cerita seputar rutinitas. Pelajaran sekolah juga boleh kalau kalian mau. Kita semua bahas di sini.<br><br>Semoga ada hal bermanfaat atau sekadar ketenangan yang bisa kamu bawa pulang setelah membaca tulisan di sini. Salam kenal! 😊</p>
+                </div>
+            </div>
+
+            <!-- KOLOM KOMENTAR -->
             <section class="comments-section">
-                <h3 class="comments-title">💬 Diskusi SMS (Komentar)</h3>
+                <h3 class="comments-title">✍️ Komentar 👇</h3>
                 
                 <div class="chat-box" id="chatBox">
-                    <!-- Balon Pengunjung -->
                     <div class="chat-bubble visitor">
                         <div class="chat-sender">Budi</div>
                         Relate banget tulisan kali ini! Aku biasanya kalau lelah suka dengerin musik pelan sih.
                     </div>
                     
-                    <!-- Balon Penulis -->
                     <div class="chat-bubble author">
                         <div class="chat-sender">Roman (Penulis) 🟢</div>
                         Setuju Bud! Musik pelan emang ampuh banget buat nurunin tensi otak.
@@ -482,7 +609,7 @@
                 </div>
 
                 <div class="chat-input-area">
-                    <input type="text" id="chatInput" placeholder="Ketik komentar ala SMS...">
+                    <input type="text" id="chatInput" placeholder="Ketik komentar di sini...">
                     <button class="chat-send-btn" id="sendBtn">Kirim ➡️</button>
                 </div>
             </section>
@@ -490,7 +617,7 @@
 
     </div>
 
-    <!-- 5. WIDGET MELAYANG SEMBUNYI DI SISI (DRAWER) -->
+    <!-- WIDGET DRAWER -->
     <button class="drawer-toggle" id="drawerToggle" title="Buka Fitur">⚙️</button>
 
     <div class="side-drawer" id="sideDrawer">
@@ -501,17 +628,14 @@
 
         <!-- Widget 1: Pemutar Musik -->
         <div class="widget-block">
-            <h4 class="widget-title">🎵 Pemutar Musik</h4>
-            <input type="text" id="ytUrl" class="widget-input" placeholder="Paste link video YouTube...">
-            <button class="widget-btn" id="playYtBtn">Putar dari YouTube</button>
-            <div style="margin: 10px 0; font-size: 11px; text-align: center; color: var(--text-muted);">— ATAU —</div>
+            <h4 class="widget-title">🎶 Putar musik favoritmu di sini</h4>
             <input type="file" id="localAudio" class="widget-input" accept="audio/*">
             <audio id="audioPlayer" controls style="width: 100%; margin-top: 5px; display: none;"></audio>
         </div>
 
-        <!-- Widget 2: Read Aloud -->
+        <!-- Widget 2: Simak Artikel -->
         <div class="widget-block">
-            <h4 class="widget-title">🗣️ Read Aloud (Suara)</h4>
+            <h4 class="widget-title">👂 Simak artikel</h4>
             <select id="voiceSelect" class="widget-select">
                 <option value="">Memuat pilihan suara...</option>
             </select>
@@ -520,7 +644,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT / LOGIKA INTERAKTIF -->
+    <!-- JAVASCRIPT LOGIKA INTERAKTIF -->
     <script>
         // --- 1. PROGRESS BAR SCROLL ---
         window.onscroll = function() {
@@ -530,7 +654,7 @@
             document.getElementById("progress-bar").style.width = scrolled + "%";
         };
 
-        // --- DARK MODE TOGGLE ---
+        // --- 2. DARK MODE TOGGLE ---
         const themeBtn = document.getElementById('themeBtn');
         themeBtn.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -543,12 +667,69 @@
             }
         });
 
-        // --- SIDE DRAWER TOGGLE ---
+        // --- 3. PENGATUR UKURAN TEKS ---
+        let currentFontSize = 17;
+        const articleBody = document.getElementById('articleContent');
+        document.getElementById('increaseFont').onclick = () => {
+            if(currentFontSize < 24) { currentFontSize += 2; articleBody.style.fontSize = currentFontSize + 'px'; }
+        };
+        document.getElementById('decreaseFont').onclick = () => {
+            if(currentFontSize > 13) { currentFontSize -= 2; articleBody.style.fontSize = currentFontSize + 'px'; }
+        };
+        document.getElementById('resetFont').onclick = () => {
+            currentFontSize = 17; articleBody.style.fontSize = currentFontSize + 'px';
+        };
+
+        // --- 4. ESTIMASI WAKTU BACA OTOMATIS ---
+        function calculateReadTime() {
+            const text = articleBody.innerText;
+            const wpm = 200;
+            const words = text.trim().split(/\s+/).length;
+            const time = Math.ceil(words / wpm);
+            document.getElementById('readTime').innerText = `⏱️ ${time} mnt baca`;
+            document.querySelector('.read-time-card').innerText = `⏱️ ${time} mnt baca`;
+        }
+        calculateReadTime();
+
+        // --- 5. FILTER KATEGORI INTERAKTIF ---
+        const chips = document.querySelectorAll('.chip');
+        const cards = document.querySelectorAll('.yt-card');
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                chips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                const cat = chip.getAttribute('data-category');
+                cards.forEach(card => {
+                    if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // --- 6. REAKSI EMOJI ---
+        document.querySelectorAll('.react-btn').forEach(btn => {
+            btn.onclick = () => {
+                let count = parseInt(btn.getAttribute('data-count')) + 1;
+                btn.setAttribute('data-count', count);
+                btn.querySelector('span').innerText = count;
+                btn.style.borderColor = 'var(--primary)';
+            };
+        });
+
+        // --- 7. TOMBOL BAGIKAN WHATSAPP ---
+        const pageUrl = encodeURIComponent(window.location.href);
+        const shareText = encodeURIComponent("Yuk baca artikel keren ini di Roman Journal: ");
+        document.getElementById('shareWa').href = `https://api.whatsapp.com/send?text=${shareText}${pageUrl}`;
+
+        // --- 8. SIDE DRAWER TOGGLE ---
         const drawer = document.getElementById('sideDrawer');
         document.getElementById('drawerToggle').onclick = () => drawer.classList.add('open');
         document.getElementById('drawerClose').onclick = () => drawer.classList.remove('open');
 
-        // --- FITUR CHAT SMS (KOMENTAR) ---
+        // --- 9. KOMENTAR CHAT ---
         const sendBtn = document.getElementById('sendBtn');
         const chatInput = document.getElementById('chatInput');
         const chatBox = document.getElementById('chatBox');
@@ -565,7 +746,7 @@
             }
         };
 
-        // --- FITUR MUSIK LOKAL ---
+        // --- 10. MUSIK LOKAL ---
         const localAudio = document.getElementById('localAudio');
         const audioPlayer = document.getElementById('audioPlayer');
         localAudio.onchange = (e) => {
@@ -577,7 +758,7 @@
             }
         };
 
-        // --- FITUR READ ALOUD (WEB SPEECH API) ---
+        // --- 11. SIMAK ARTIKEL (SPEECH SYNTHESIS) ---
         const synth = window.speechSynthesis;
         const voiceSelect = document.getElementById('voiceSelect');
         let voices = [];
