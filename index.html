@@ -290,37 +290,40 @@
             gap: 6px;
         }
 
-        /* --- KARTU TENTANG SAYA --- */
+        /* --- KARTU TENTANG SAYA (FOTO DI ATAS DESKRIPSI) --- */
         .about-author {
             margin-top: 35px;
-            padding: 20px;
+            padding: 25px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 18px;
+            text-align: center;
         }
 
         .author-avatar {
-            width: 70px;
-            height: 70px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--primary);
-            flex-shrink: 0;
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 15px;
         }
 
         .author-info h4 {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .author-info p {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-muted);
-            line-height: 1.5;
+            line-height: 1.6;
+            max-width: 550px;
         }
 
         /* --- KOMENTAR --- */
@@ -584,8 +587,8 @@
 
             <!-- TENTANG SAYA -->
             <div class="about-author">
-                <!-- Kalau sudah upload foto profil sendiri, ganti src di bawah jadi "foto-profil.jpg" -->
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Foto Roman" class="author-avatar" id="authorImg">
+                <!-- Memanggil foto profil kamu di GitHub -->
+                <img src="foto-profil.jpg" alt="Foto Roman" class="author-avatar" id="authorImg">
                 <div class="author-info">
                     <h4>Tentang Saya — Roman ✍️</h4>
                     <p>Halo! Perkenalkan, aku Roman. Selamat datang di jurnal pribadiku. ✍️✨ Di sini aku membagikan catatan harian, pemikiran santai, serta cerita seputar rutinitas. Pelajaran sekolah juga boleh kalau kalian mau. Kita semua bahas di sini.<br><br>Semoga ada hal bermanfaat atau sekadar ketenangan yang bisa kamu bawa pulang setelah membaca tulisan di sini. Salam kenal! 😊</p>
